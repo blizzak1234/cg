@@ -54,12 +54,9 @@ if key == "":
 s = post_data(base_url, headers, key)
 data_s = s.decode('utf-8').splitlines()
 x = str(data['reportingPeriod']['year']) + '-' + str(data['reportingPeriod']['month']) + '-' + str(data['reportingPeriod']['day'])
-with open("tmp.csv", "a", newline='') as csv_file:
+
+with open(file=data['reportType'] + ".csv", mode="a", newline='') as csv_file:
     writer = csv.writer(csv_file, delimiter=' ', doublequote=False, escapechar=' ')
     writer.writerow(x)
     for line in data_s:
         writer.writerow(re.split("\s+", line))
-
-
-
-
