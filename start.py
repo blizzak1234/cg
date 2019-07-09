@@ -14,6 +14,7 @@ def post_start(url, headers_, data_):
     request_start = requests.post(url=full_url, headers=headers_, json=data_)
     json_data = json.loads(request_start.content)
     status = json_data.get('status')
+    print('start report')
     return status
 
 
@@ -23,9 +24,11 @@ def post_status(url, headers_, data_):
     json_data = json.loads(request_status.content)
     report_status = json_data.get('reportStatus')
     access_key = report_status.get('accessKey')
+    print('waiting access key')
     if access_key is not None:
         access_key_str = str('{"accessKey":"' + access_key + '"}')
         json_ak = json.loads(access_key_str)
+        print(access_key)
         return json_ak
     else:
         return ""
@@ -35,6 +38,7 @@ def post_data(url, headers_, key_):
     full_url = str(url + '/integration/rest/dgoj/report/data-stream')
     raw_data = requests.post(url=full_url, headers=headers_, json=key_)
     request_data = raw_data.content
+    print('waiting data')
     return request_data
 
 
@@ -55,8 +59,12 @@ s = post_data(base_url, headers, key)
 data_s = s.decode('utf-8').splitlines()
 x = str(data['reportingPeriod']['year']) + '-' + str(data['reportingPeriod']['month']) + '-' + str(data['reportingPeriod']['day'])
 
+print('creation report file')
+
 with open(file=data['reportType'] + ".csv", mode="a", newline='') as csv_file:
     writer = csv.writer(csv_file, delimiter=' ', doublequote=False, escapechar=' ')
     writer.writerow(x)
     for line in data_s:
         writer.writerow(re.split("\s+", line))
+
+print('done')
