@@ -59,13 +59,13 @@ s = post_data(base_url, headers, key)
 data_s = s.decode('utf-8').splitlines()
 year = str(data['reportingPeriod']['year'])
 month = str(data['reportingPeriod']['month'])
-day = str(data['reportingPeriod'].get('day'))
+raw_day = data['reportingPeriod'].get('day')
+day = str(raw_day)
 
-
-if day is not None:
-    x = year + '-' + month + '-' + day
-else:
+if raw_day is None:
     x = year + '-' + month
+else:
+    x = year + '-' + month + '-' + day
 
 print('creation report file')
 
